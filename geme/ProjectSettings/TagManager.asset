@@ -3,7 +3,17 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - RedTrigger
+  - YellowTrigger
+  - GreenTrigger
+  - BlueTrigger
+  - OrangeTrigger
+  - RedLaserTrigger
+  - YellowLaserTrigger
+  - GreenLaserTrigger
+  - BlueLaserTrigger
+  - OrangeLaserTrigger
   layers:
   - Default
   - TransparentFX

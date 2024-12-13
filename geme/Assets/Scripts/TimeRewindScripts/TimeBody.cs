@@ -8,13 +8,12 @@ public class TimeBody : MonoBehaviour {
 
 	bool isRewinding = false;
 
-	public float recordTime = 5f;
+	public float recordTimeRewind = 5f;
 
-	List<PointInTime> pointsInTime;
+	public List<PointInTime> pointsInTime;
     private PlayerInputActions playerControls;
 	private InputAction rewind;
 	private Rigidbody2D rb;
-	public bool isActive = false;
 
 	// Use this for initialization
 	void Start () {
@@ -50,7 +49,7 @@ public class TimeBody : MonoBehaviour {
 	{
 		if (isRewinding)
 			Rewind();
-		else if (isActive)
+		else
 		{
 			Record();
 		}
@@ -73,7 +72,7 @@ public class TimeBody : MonoBehaviour {
 
 	void Record()
 	{
-		if (pointsInTime.Count > Mathf.Round(recordTime / Time.fixedDeltaTime))
+		if (pointsInTime.Count > Mathf.Round(recordTimeRewind / Time.fixedDeltaTime))
 		{
 			pointsInTime.RemoveAt(pointsInTime.Count - 1);
 		}

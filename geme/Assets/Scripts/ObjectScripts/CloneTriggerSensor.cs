@@ -1,72 +1,24 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
-public class Square_Test : MonoBehaviour
+public class CloneTriggerSensor : MonoBehaviour
 {
-
-    private Rigidbody2D rb;
-    private SpriteRenderer rbSprite;    
-    private PlayerInputActions SquareControls;
-    private InputAction move;
-    private InputAction jump;
-    private Vector2 moveDirection = Vector2.zero;
-    private Vector2 moveForce = Vector2.zero;
-    private Vector2 jumpForce = new Vector2(0,5);
-
     // Start is called before the first frame update
-
-
     void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
-        rbSprite = GetComponent<SpriteRenderer>();  
+        
     }
 
-
-
-    private void Awake()
+    // Update is called once per frame
+    void Update()
     {
-        SquareControls = new PlayerInputActions();
-    }
-
-
-
-    internal void OnEnable()
-    {
-        move = SquareControls.Player.Move;
-        jump = SquareControls.Player.Jump;
-        move.Enable();
-        jump.Enable();
-    }
-
-    internal void OnDisable()
-    {
-        move.Disable();
-        jump.Disable();
-    }
-
-
-    private void FixedUpdate()
-    {
-      
-        moveDirection = move.ReadValue<Vector2>();
-        //Debug.Log(moveDirection);  
-        moveForce = new Vector2(moveDirection.x, 0f);
-        rb.AddForce(moveForce * 10);
-        if (jump.WasPressedThisFrame())
-        {
-            Debug.Log("Jumped");
-            rb.AddForce(jumpForce, ForceMode2D.Impulse);
-        }
+        
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.gameObject.tag == "RedTrigger")
+        if (collision.gameObject.tag == "RedTrigger")
         {
             ColorManager.color_code = 0;
         }
@@ -86,9 +38,9 @@ public class Square_Test : MonoBehaviour
         {
             ColorManager.color_code = 4;
         }
-        else if(collision.gameObject.tag == "RedLaserTrigger")
+        else if (collision.gameObject.tag == "RedLaserTrigger")
         {
-            if(ColorManager.color_code == 0)
+            if (ColorManager.color_code == 0)
             {
                 ColorManager.red_disable = true;
             }
@@ -97,9 +49,9 @@ public class Square_Test : MonoBehaviour
                 ColorManager.red_disable = false;
             }
         }
-        else if(collision.gameObject.tag == "YellowLaserTrigger")
+        else if (collision.gameObject.tag == "YellowLaserTrigger")
         {
-            if(ColorManager.color_code == 1)
+            if (ColorManager.color_code == 1)
             {
                 ColorManager.yellow_disable = true;
             }
