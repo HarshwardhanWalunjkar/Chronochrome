@@ -15,6 +15,7 @@ public class TimeBody : MonoBehaviour {
 	private InputAction rewind;
 	private Rigidbody2D rb;
 
+	public Animator rewindUI;
 	// Use this for initialization
 	void Start () {
 		pointsInTime = new List<PointInTime>();
@@ -37,12 +38,20 @@ public class TimeBody : MonoBehaviour {
         rewind.Disable();	
     }
 
-    // Update is called once per frame
-    void Update () {
+	// Update is called once per frame
+	void Update()
+	{
 		if (rewind.WasPressedThisFrame())
+		{
 			StartRewind();
+			rewindUI.SetTrigger("Start");
+		}
 		if (rewind.WasReleasedThisFrame())
+		{
 			StopRewind();
+			rewindUI.SetTrigger("Stop");
+
+		}
 	}
 
 	void FixedUpdate ()

@@ -10,7 +10,8 @@ public class ReplayBody : MonoBehaviour
 {
     bool isReplaying;
 
-    private float recordTimeReplay = 5f;
+    public float recordTimeReplay;
+    public int replayRepetitions;
 
     public GameObject ReplayObjectPrefab;
     private GameObject ReplayObject;
@@ -28,23 +29,19 @@ public class ReplayBody : MonoBehaviour
     private Rigidbody2D rb;
 
     private int count;
-    private int sec_count = 0;
 
     private bool isActive = true;
-    private bool mov_flag = true;
 
     private Vector2 init_pos;
     private Quaternion init_rot;
 
-    private Square_Test sq_mov;
-
+    public Animator replayUI;
     // Use this for initialization
     void Start()
     {
         isReplaying = false;
         pointsInTimeReplay = new List<PointInTime>();
-        rb = GetComponent<Rigidbody2D>();
-        sq_mov = GetComponent<Square_Test>();  
+        rb = GetComponent<Rigidbody2D>(); 
     }
 
     private void Awake()
@@ -73,6 +70,7 @@ public class ReplayBody : MonoBehaviour
             {
                 Debug.Log("REPLAYING NOW");
                 StartReplay();
+                replayUI.SetTrigger("Start");
             }
         }
     }
@@ -85,16 +83,6 @@ public class ReplayBody : MonoBehaviour
 
         if (isReplaying)
         {
-            if (mov_flag)
-            {
-                sec_count++;
-                if (sec_count > Mathf.Round(1f / Time.fixedDeltaTime))
-                {
-                    sq_mov.OnEnable();
-                    Debug.Log("Movement Enabled");
-                    mov_flag = false;
-                }
-            }
             Replay();
         }
         else if (isActive)
@@ -117,8 +105,8 @@ public class ReplayBody : MonoBehaviour
             init_rot = Quaternion.identity;
             ReplayObject = Instantiate(ReplayObjectPrefab, init_pos, init_rot);
             ColorManager.clone_spawn = 1;
-            rb_clone = ReplayObject.GetComponent<Rigidbody2D>(); 
-            rb_clone.isKinematic = true;  
+            rb_clone = ReplayObject.GetComponent<Rigidbody2D>();
+            rb_clone.isKinematic = true;
         }
     }
 
@@ -139,9 +127,10 @@ public class ReplayBody : MonoBehaviour
             direction *= -1;
             replay_count++;
         }
-        if(replay_count == 5)
+        if(replay_count == replayRepetitions)
         {
             StopReplay();
+            replayUI.SetTrigger("Stop");
         }
     }
 
@@ -165,8 +154,6 @@ public class ReplayBody : MonoBehaviour
     //Starts the replay, responsible for disabling player square movement, spawning replay object prefab and then replaying
     public void StartReplay()
     {
-        sq_mov.OnDisable();
-        Debug.Log("Movement disabled");
         SpawnReplayInstance();
         isReplaying = true;
     }

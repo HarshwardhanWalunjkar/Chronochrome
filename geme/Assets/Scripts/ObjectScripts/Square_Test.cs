@@ -7,66 +7,84 @@ using UnityEngine.InputSystem;
 
 public class Square_Test : MonoBehaviour
 {
-
     private Rigidbody2D rb;
-    private SpriteRenderer rbSprite;    
+    private SpriteRenderer rbSprite;
     private PlayerInputActions SquareControls;
     private InputAction move;
     private InputAction jump;
+    private InputAction esc;
     private Vector2 moveDirection = Vector2.zero;
-    private Vector2 moveForce = Vector2.zero;
-    private Vector2 jumpForce = new Vector2(0,5);
+    private float moveSpeed = 7f; // Adjust movement speed here
+    private Vector2 jumpForce = new Vector2(0, 8f);
+    private bool isGrounded = true; // To check if the object is on the ground
+    private Timer timer;
+    public int orbGoal;
+    private int orbCount = 0;
 
-    // Start is called before the first frame update
-
-
+    public Animator EscScreen;
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        rbSprite = GetComponent<SpriteRenderer>();  
+        rbSprite = GetComponent<SpriteRenderer>();
+        ColorManager.color_code = -1;
     }
-
-
 
     private void Awake()
     {
         SquareControls = new PlayerInputActions();
     }
 
-
-
     internal void OnEnable()
     {
         move = SquareControls.Player.Move;
         jump = SquareControls.Player.Jump;
+        esc = SquareControls.Player.Escape;
         move.Enable();
         jump.Enable();
+        esc.Enable();
     }
 
     internal void OnDisable()
     {
         move.Disable();
         jump.Disable();
+        esc.Disable();
     }
 
+    private void Update()
+    {
+        // Jump logic in Update to detect input
+        if (jump.WasPressedThisFrame() && isGrounded)
+        {
+            rb.AddForce(jumpForce, ForceMode2D.Impulse);
+            isGrounded = false; // Ensure jump happens only when grounded
+        
+        }
+        if (esc.WasPressedThisFrame()) {
+            EscScreen.SetBool("Escape", !EscScreen.GetBool("Escape"));
+        }
+    }
 
     private void FixedUpdate()
     {
-      
+        // Smooth movement in FixedUpdate
         moveDirection = move.ReadValue<Vector2>();
-        //Debug.Log(moveDirection);  
-        moveForce = new Vector2(moveDirection.x, 0f);
-        rb.AddForce(moveForce * 10);
-        if (jump.WasPressedThisFrame())
+        rb.velocity = new Vector2(moveDirection.x * moveSpeed, rb.velocity.y);
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        // Check if the object is grounded
+        if (collision.gameObject.CompareTag("Tile"))
         {
-            Debug.Log("Jumped");
-            rb.AddForce(jumpForce, ForceMode2D.Impulse);
+            isGrounded = true;
         }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.gameObject.tag == "RedTrigger")
+        // Color and orb handling logic remains unchanged
+        if (collision.gameObject.tag == "RedTrigger")
         {
             ColorManager.color_code = 0;
         }
@@ -86,60 +104,43 @@ public class Square_Test : MonoBehaviour
         {
             ColorManager.color_code = 4;
         }
-        else if(collision.gameObject.tag == "RedLaserTrigger")
+        else if (collision.gameObject.tag == "RedLaserTrigger")
         {
-            if(ColorManager.color_code == 0)
-            {
-                ColorManager.red_disable = true;
-            }
-            else
-            {
-                ColorManager.red_disable = false;
-            }
+            ColorManager.red_disable = (ColorManager.color_code == 0);
         }
-        else if(collision.gameObject.tag == "YellowLaserTrigger")
+        else if (collision.gameObject.tag == "YellowLaserTrigger")
         {
-            if(ColorManager.color_code == 1)
-            {
-                ColorManager.yellow_disable = true;
-            }
-            else
-            {
-                ColorManager.yellow_disable = false;
-            }
+            ColorManager.yellow_disable = (ColorManager.color_code == 1);
         }
         else if (collision.gameObject.tag == "GreenLaserTrigger")
         {
-            if (ColorManager.color_code == 2)
-            {
-                ColorManager.green_disable = true;
-            }
-            else
-            {
-                ColorManager.green_disable = false;
-            }
+            ColorManager.green_disable = (ColorManager.color_code == 2);
         }
         else if (collision.gameObject.tag == "BlueLaserTrigger")
         {
-            if (ColorManager.color_code == 3)
-            {
-                ColorManager.blue_disable = true;
-            }
-            else
-            {
-                ColorManager.blue_disable = false;
-            }
+            ColorManager.blue_disable = (ColorManager.color_code == 3);
         }
         else if (collision.gameObject.tag == "OrangeLaserTrigger")
         {
-            if (ColorManager.color_code == 4)
-            {
-                ColorManager.orange_disable = true;
-            }
-            else
-            {
-                ColorManager.orange_disable = false;
-            }
+            ColorManager.orange_disable = (ColorManager.color_code == 4);
+        }
+        else if (collision.gameObject.tag == "PurpleOrb")
+        {
+            orbCount++;
+            Debug.Log(orbCount);
+            Debug.Log(orbGoal);
+            collision.gameObject.GetComponent<Animator>().SetBool("Captured", true);
+            Destroy(collision.gameObject);
+        }
+        else if(collision.gameObject.tag == "PurpleTrigger" && orbCount == orbGoal)
+        {
+            Debug.Log("NextLevel");
+            ScenesManager.instance.LoadNextScene();
+        }
+        else if(collision.gameObject.tag == "GameOver")
+        {
+            Debug.Log("GameOver");
+            ScenesManager.instance.MainMenu();
         }
     }
 }

@@ -14,6 +14,10 @@ TagManager:
   - GreenLaserTrigger
   - BlueLaserTrigger
   - OrangeLaserTrigger
+  - PurpleOrb
+  - Tile
+  - PurpleTrigger
+  - GameOver
   layers:
   - Default
   - TransparentFX
