@@ -12,13 +12,19 @@ EditorBuildSettings:
     path: Assets/Scenes/Introduction.unity
     guid: e7cf65497e74321479d097e58b046ad9
   - enabled: 1
-    path: Assets/Scenes/Level1_Test.unity
-    guid: 68c7a1f1234a95741a8cf1712bfacb75
+    path: Assets/LevelsProper/Elevitating.unity
+    guid: 1763eadbfd4c00a4997f511260086a70
   - enabled: 1
-    path: Assets/Scenes/GayCrouds.unity
-    guid: 50a8aec6dab62e34b80e1b05eb5095d6
+    path: Assets/LevelsProper/OnTheBridge.unity
+    guid: 2b7aa94e27e8e89449544ac1bc9b3d7f
   - enabled: 1
-    path: Assets/Scenes/S.unity
-    guid: b25fb97d51f0b4747b7a99127c6d2cb4
+    path: Assets/LevelsProper/S.unity
+    guid: bb518bb0b031400488227585be07f663
+  - enabled: 1
+    path: Assets/LevelsProper/SchindlersWheel.unity
+    guid: 5a8582319687c6248849394d71ca51ff
+  - enabled: 1
+    path: Assets/LevelsProper/Acid Trip.unity
+    guid: a64040cf1d293d245a217f1be234448d
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: b39304b3956ae1749beb8fd16af2fb46, type: 2}

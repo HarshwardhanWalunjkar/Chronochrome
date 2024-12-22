@@ -22,7 +22,7 @@ public class Outline_Replay_Script : MonoBehaviour
         if (count > 0)
         {
             point = replay.pointsInTimeReplay[count-1];
-            Border.SetPositionAndRotation(point.position, point.rotation);
+            Border.SetPositionAndRotation(new Vector2(point.position.x+0.06f, point.position.y+0.054f), point.rotation);
         }
     }
 }

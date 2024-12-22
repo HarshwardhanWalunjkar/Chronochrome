@@ -16,11 +16,12 @@ public class TimeBody : MonoBehaviour {
 	private Rigidbody2D rb;
 
 	public Animator rewindUI;
+
 	// Use this for initialization
 	void Start () {
 		pointsInTime = new List<PointInTime>();
 		rb = GetComponent<Rigidbody2D>();
-	}
+    }
 
     private void Awake()
     {
@@ -45,13 +46,16 @@ public class TimeBody : MonoBehaviour {
 		{
 			StartRewind();
 			rewindUI.SetTrigger("Start");
+			FindObjectOfType<AudioManager>().Play("PlayerRewind");
+			
 		}
 		if (rewind.WasReleasedThisFrame())
 		{
 			StopRewind();
 			rewindUI.SetTrigger("Stop");
+            FindObjectOfType<AudioManager>().Stop("PlayerRewind");
 
-		}
+        }
 	}
 
 	void FixedUpdate ()

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 public class ScenesManager : MonoBehaviour
@@ -15,9 +16,12 @@ public class ScenesManager : MonoBehaviour
     {
         HomeScreen,
         Introduction,
-        Level1_Test,
-        GayCrouds,
-        S
+        Elevitating,
+        OnTheBridge,
+        S,
+        SchindlersWheel,
+        AcidTrip
+
     }
 
     public void LoadScene(Scene scene)
@@ -29,7 +33,7 @@ public class ScenesManager : MonoBehaviour
     public void LoadNewGame()
     {
         ColorManager.clone_spawn = 0;
-        SceneManager.LoadScene(Scene.Level1_Test.ToString());
+        SceneManager.LoadScene(Scene.Elevitating.ToString());
     }
     public void LoadNextScene()
     {
@@ -56,10 +60,10 @@ public class ScenesManager : MonoBehaviour
         ColorManager.clone_spawn = 0;
         ColorManager.color_code = -1;
         transition.SetTrigger("End");
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(3);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
-        transition.SetTrigger("Start");
-        yield return new WaitForSeconds(1);
+        //transition.SetTrigger("Start");
+        //yield return new WaitForSeconds(2);
     }
 
     public void EndGame()

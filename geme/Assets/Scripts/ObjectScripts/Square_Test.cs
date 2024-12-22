@@ -15,13 +15,16 @@ public class Square_Test : MonoBehaviour
     private InputAction esc;
     private Vector2 moveDirection = Vector2.zero;
     private float moveSpeed = 7f; // Adjust movement speed here
-    private Vector2 jumpForce = new Vector2(0, 8f);
+    private Vector2 jumpForce = new Vector2(0, 5f);
     private bool isGrounded = true; // To check if the object is on the ground
     private Timer timer;
     public int orbGoal;
     private int orbCount = 0;
 
     public Animator EscScreen;
+
+    private Vector3 m_velocity = Vector3.zero   ;
+    [Range(0, .3f)][SerializeField] private float m_MovementSmoothing = .05f;
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -69,7 +72,8 @@ public class Square_Test : MonoBehaviour
     {
         // Smooth movement in FixedUpdate
         moveDirection = move.ReadValue<Vector2>();
-        rb.velocity = new Vector2(moveDirection.x * moveSpeed, rb.velocity.y);
+        Vector3 targetVelocity = new Vector2(moveDirection.x * moveSpeed, rb.velocity.y);
+        rb.velocity = Vector3.SmoothDamp(rb.velocity, targetVelocity, ref m_velocity, m_MovementSmoothing );
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -141,6 +145,10 @@ public class Square_Test : MonoBehaviour
         {
             Debug.Log("GameOver");
             ScenesManager.instance.MainMenu();
+        }
+        else
+        {
+            return;
         }
     }
 }
